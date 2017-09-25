@@ -10,7 +10,7 @@
 apply plugin: 'java-library'
 apply plugin: 'application'
 
-mainClassName = "songlib.app.HelloWorld"
+mainClassName = "songlib.app.SongLib"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
