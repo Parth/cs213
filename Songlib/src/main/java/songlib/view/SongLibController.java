@@ -4,38 +4,33 @@ import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import songlib.app.Song;
 
 public class SongLibController {
     
 	   @FXML         
-	   ListView<String> listView;                
+	   ListView<Song> listView; 
+	   
+	   @FXML Button save;
+	   @FXML Button delete;
+	   @FXML TextField name;
+	   @FXML TextField artist;
+	   @FXML TextField album;
+	   @FXML TextField year;
+	   
 
-	   private ObservableList<String> obsList;              
+	   private ObservableList<Song> obsList;              
 	  
 	   public void start(Stage mainStage) {                
 	      // create an ObservableList 
 	      // from an ArrayList              
-	      obsList = FXCollections.observableArrayList(                               
-	                 "Giants",                               
-	                 "Patriots",
-                  "49ers",
-                  "Rams",
-                  "Packers",
-                  "Colts",
-                  "Cowboys",
-                  "Broncos",
-                  "Vikings",
-                  "Dolphins",
-                  "Titans",
-                  "Seahawks",
-                  "Steelers",
-	                 "Jaguars");               
+	      obsList = FXCollections.observableArrayList();               
 	      listView.setItems(obsList);  
 	      
 	      // select the first item
@@ -47,40 +42,41 @@ public class SongLibController {
 	        .selectedIndexProperty()
 	        .addListener(
 	           (obs, oldVal, newVal) -> 
-	               showItemInputDialog(mainStage));
+	               showItemInfo(mainStage));
 
 	   }
 	   
-	   private void showItem(Stage mainStage) {                
-		   Alert alert = 
-				   new Alert(AlertType.INFORMATION);
-		   alert.initOwner(mainStage);
-		   alert.setTitle("List Item");
-		   alert.setHeaderText(
-				   "Selected list item properties");
-
-		   String content = "Index: " + 
-				   listView.getSelectionModel()
-		   .getSelectedIndex() + 
-		   "\nValue: " + 
-		   listView.getSelectionModel()
-		   .getSelectedItem();
-
-		   alert.setContentText(content);
-		   alert.showAndWait();
+	   public void saveSong(ActionEvent e) {
+		   
 	   }
 	   
-	   private void showItemInputDialog(Stage mainStage) {                
-		   String item = listView.getSelectionModel().getSelectedItem();
+	   public void deleteSong(ActionEvent e) {
+		   if (obsList.size() == 1) {
+			   //Add some error texts
+		   }
+		   else {
+			   int index = listView.getSelectionModel().getSelectedIndex();	
+			   obsList.remove(index);
+		   }
+		   listView.getSelectionModel().select(0);
+		   
+	   }
+	   
+	   private void showItemInfo(Stage mainStage) {                
+		   Song item = listView.getSelectionModel().getSelectedItem();
 		   int index = listView.getSelectionModel().getSelectedIndex();
-
+		   
+		   
+		   
+		   
+		   /*
 		   TextInputDialog dialog = new TextInputDialog(item);
 		   dialog.initOwner(mainStage); dialog.setTitle("List Item");
 		   dialog.setHeaderText("Selected Item (Index: " + index + ")");
 		   dialog.setContentText("Enter name: ");
-
-		   Optional<String> result = dialog.showAndWait();
-		   if (result.isPresent()) { obsList.set(index, result.get()); }
+*/
+		   //Optional<String> result = dialog.showAndWait();
+		   //if (result.isPresent()) { obsList.set(index, result.get()); }
 	   }
 
 

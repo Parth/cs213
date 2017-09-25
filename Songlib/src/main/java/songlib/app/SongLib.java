@@ -14,7 +14,7 @@ public class SongLib extends Application {
 	public void start(Stage primaryStage) 
 	throws Exception {
 		FXMLLoader loader = new FXMLLoader();   
-	      loader.setLocation(getClass().getResource("../view/SongLib.fxml"));
+	      loader.setLocation(getClass().getResource("/SongLib.fxml"));
 	      Parent root = loader.load();
 
 	      SongLibController listController = 
