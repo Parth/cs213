@@ -1,3 +1,6 @@
+/**
+ * Shantanu Laghate, Parth Mehrotra
+ */
 package songlib.app;
 
 import javafx.application.Application;
@@ -17,6 +20,8 @@ public class SongLib extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/SongLib.fxml"));
 		Parent root = loader.load();
+		
+		
 		Scene scene = new Scene(root, 1024, 720);
 		primaryStage.setScene(scene);
 		primaryStage.show();
