@@ -7,14 +7,20 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import songlib.view.SongLibController;
 
- 
+import java.nio.file.Paths;
+
+
 public class SongLib extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) 
 	throws Exception {
-		FXMLLoader loader = new FXMLLoader();   
-	      loader.setLocation(getClass().getResource("../view/SongLib.fxml"));
+		FXMLLoader loader = new FXMLLoader();
+
+		System.out.println("test");
+		System.out.println(getClass().getResource("/SongLib.fxml"));
+		loader.setLocation(getClass().getResource("/SongLib.fxml"));
+
 	      Parent root = loader.load();
 
 	      SongLibController listController = 
