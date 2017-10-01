@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Songlib.iml" filepath="$PROJECT_DIR$/Songlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Songlib.iml" filepath="$PROJECT_DIR$/.idea/modules/Songlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Songlib_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Songlib_main.iml" group="Songlib" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Songlib_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Songlib_test.iml" group="Songlib" />
     </modules>
   </component>
 </project>
