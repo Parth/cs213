@@ -4,10 +4,10 @@
 package songlib.app;
 
 public class Song {
-	public String name;
-	public String artist;
-	public String album;
-	public int year;
+	private String name;
+	private String artist;
+	private String album;
+	private int year;
 
 	public Song () {
 		name = "Song name";

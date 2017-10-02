@@ -97,9 +97,9 @@ public class SongLibController {
 		   Song newSong = obsList.get(index);
 		   
 		   name.textProperty().set(newSong.getName());
-		   artist.textProperty().set(newSong.artist);
-		   album.textProperty().set(newSong.album);
-		   year.textProperty().set(Integer.toString(newSong.year));
+		   artist.textProperty().set(newSong.getArtist());
+		   album.textProperty().set(newSong.getAlbum());
+		   year.textProperty().set(Integer.toString(newSong.getYear()));
 		   if (index == 1) {
 			   //you cannot delete the add song field
 			   delete.disableProperty().set(true);
