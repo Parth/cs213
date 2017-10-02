@@ -1,12 +1,23 @@
+/**
+ * Shantanu Laghate, Parth Mehrotra
+ */
 package songlib.app;
 
 public class Song {
-	private String name;
-	private String artist;
-	private String album;
-	private int year;
+	public String name;
+	public String artist;
+	public String album;
+	public int year;
 
-	public Song(String name, String artist, String album, int year) {
+	public Song () {
+		name = "Song name";
+		artist = "Song artist";
+		album = "Song album";
+		year = 1998;
+	}
+	
+	public Song(String name, String artist, 
+			String album, int year) {
 		this.name = name;
 		this.artist = artist;
 		this.album = album;
@@ -76,4 +87,5 @@ public class Song {
 				", year=" + year +
 				'}';
 	}
+	
 }
