@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
 <SplitPane
         dividerPositions="0.25"
         xmlns="http://javafx.com/javafx/8.0.111">
@@ -31,7 +32,8 @@
                 <VBox
                         AnchorPane.topAnchor="0.0"
                         AnchorPane.rightAnchor="0.0"
-                        AnchorPane.leftAnchor="0.0">
+                        AnchorPane.leftAnchor="0.0"
+                        AnchorPane.bottomAnchor="0.0">
                     <children>
                         <HBox>
                             <children>
@@ -55,6 +57,13 @@
                             <children>
                                 <Label>Year</Label>
                                 <TextField/>
+                            </children>
+                        </HBox>
+                        <HBox
+                            AnchorPane.bottomAnchor="0.0">
+                            <children>
+                                <Button>Edit</Button>
+                                <Button>Submit</Button>
                             </children>
                         </HBox>
                     </children>
