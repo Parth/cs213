@@ -33,8 +33,6 @@ public class SongLibController {
 	   private ObservableList<Song> obsList;              
 	   private Stage mainStage;
 	  
-	  public void setup 
-	  
 	   public void start(Stage mainStage) {  
 		   this.mainStage = mainStage;
 		   System.out.println("Test");
