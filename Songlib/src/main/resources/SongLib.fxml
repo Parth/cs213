@@ -10,13 +10,16 @@
 <?import javafx.scene.control.Button?>
 <SplitPane
         dividerPositions="0.25"
-        xmlns="http://javafx.com/javafx/8.0.111">
+        xmlns="http://javafx.com/javafx/8.0.111"
+		xmlns:fx="http://javafx.com/fxml/1"
+		fx:controller="songlib.view.SongLibController">
     <items>
         <AnchorPane
                 prefHeight="160.0"
                 prefWidth="100.0">
             <children>
                 <ListView
+						fx:id="listView"
                         AnchorPane.topAnchor="0.0"
                         AnchorPane.bottomAnchor="0.0"
                         AnchorPane.rightAnchor="0.0"
@@ -38,32 +41,36 @@
                         <HBox>
                             <children>
                                 <Label>Name</Label>
-                                <TextField/>
+                                <TextField
+									fx:id="name"/>
                             </children>
                         </HBox>
                         <HBox>
                             <children>
                                 <Label>Artist</Label>
-                                <TextField/>
+                                <TextField
+									fx:id="artist"/>
                             </children>
                         </HBox>
                         <HBox>
                             <children>
                                 <Label>Album</Label>
-                                <TextField/>
+                                <TextField
+									fx:id="album"/>
                             </children>
                         </HBox>
                         <HBox>
                             <children>
                                 <Label>Year</Label>
-                                <TextField/>
+                                <TextField
+									fx:id="year"/>
                             </children>
                         </HBox>
                         <HBox
                             AnchorPane.bottomAnchor="0.0">
                             <children>
-                                <Button>Edit</Button>
-                                <Button>Submit</Button>
+                                <Button fx:id="save">Save</Button>
+                                <Button fx:id="delete">Delete</Button>
                             </children>
                         </HBox>
                     </children>

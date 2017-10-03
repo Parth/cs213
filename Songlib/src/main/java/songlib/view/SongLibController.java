@@ -28,14 +28,16 @@ public class SongLibController {
 	   @FXML private TextField artist;
 	   @FXML private TextField album;
 	   @FXML private TextField year;
-	   
+	  
 
 	   private ObservableList<Song> obsList;              
-	  private Stage mainStage;
+	   private Stage mainStage;
 	  
+	  public void setup 
 	  
 	   public void start(Stage mainStage) {  
 		   this.mainStage = mainStage;
+		   System.out.println("Test");
 		  //set the change methods for the text fields
 		  //this listener just enables the save button
 		  name.textProperty().addListener(editEnableListener);
