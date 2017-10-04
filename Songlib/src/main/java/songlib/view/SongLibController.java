@@ -7,6 +7,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
+import java.io.PrintWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +20,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import songlib.app.Song;
+
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+
+import java.util.ArrayList;
 
 public class SongLibController {
 	
@@ -65,8 +79,25 @@ public class SongLibController {
 		
 		// create an ObservableList
 		// from an ArrayList
+
 		obsList = FXCollections.observableArrayList();
-		obsList.add(new Song());
+
+		IOException ioe = null;
+		try {
+			String content = new String(Files.readAllBytes(Paths.get("library.dat")));
+			Gson gson = new Gson(); 
+			Type songList = new TypeToken<ArrayList<Song>>(){}.getType();
+			ArrayList<Song> tempList = gson.fromJson(content, songList);
+			obsList.addAll(tempList);
+		} catch (IOException e) {
+			System.err.println("No save file");
+			ioe = e;
+		}
+
+		if (ioe != null || obsList == null) {
+			obsList.add(new Song());
+		}
+		obsList.addListener((ListChangeListener) (c -> {saveList();}));
 		listView.setItems(obsList);
 
 		// select the first item
@@ -75,6 +106,21 @@ public class SongLibController {
 		// set listener for the items
 		listView.setOnMouseClicked(showSong);
 
+	}
+
+	private void saveList() {
+		System.out.println("Saving List");
+		Gson gson = new Gson();
+		String json = gson.toJson(obsList);
+		System.out.println(json);
+		
+		try {
+			PrintWriter out = new PrintWriter("library.dat");
+			out.println(json);
+			out.close();
+		} catch (FileNotFoundException e) {
+			System.err.println("Save file not accessible");
+		}
 	}
 	
 	// For Text fields
