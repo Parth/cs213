@@ -69,8 +69,8 @@
                         <HBox
                             AnchorPane.bottomAnchor="0.0">
                             <children>
-                                <Button fx:id="save">Save</Button>
-                                <Button fx:id="delete">Delete</Button>
+                                <Button fx:id="save" disable="true">Save</Button>
+                                <Button fx:id="delete" disable="true">Delete</Button>
                             </children>
                         </HBox>
                     </children>

@@ -10,10 +10,10 @@ public class Song {
 	private int year;
 
 	public Song () {
-		name = "Song name";
-		artist = "Song artist";
-		album = "Song album";
-		year = 1998;
+		name = "Add new song";
+		artist = "";
+		album = "";
+		year = 0;
 	}
 	
 	public Song(String name, String artist, 
@@ -80,12 +80,7 @@ public class Song {
 
 	@Override
 	public String toString() {
-		return "Song{" +
-				"name='" + name + '\'' +
-				", artist='" + artist + '\'' +
-				", album='" + album + '\'' +
-				", year=" + year +
-				'}';
+		return name + "\n" + artist;
 	}
 	
 }
