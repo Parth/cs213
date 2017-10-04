@@ -165,7 +165,7 @@ public class SongLibController {
 
 	// this method is a general form to show a song at a certain index
 	private void showSongAtIndex(int index) {
-		if (obsList.size()>1) {
+		if (obsList.size() > 0 && index >= 0 && index < obsList.size()) {
 			listView.getSelectionModel().select(index);
 
 			Song newSong = obsList.get(index);
@@ -191,7 +191,18 @@ public class SongLibController {
 			String newArtist = artist.getText();
 			String newAlbum = album.getText();
 			// -1 if year is empty to avoid Number parsing errors
-			int newYear = Integer.parseInt(year.getText().equals("") ? "-1" : year.getText());
+			int newYear;
+			try {
+				newYear = Integer.parseInt(year.getText().equals("") ? "-1" : year.getText());
+			} catch (Exception exc) {
+				exc.printStackTrace();
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.initOwner(mainStage);
+				alert.setTitle("Year Error!");
+				alert.setHeaderText("Your year is not valid!");
+				alert.showAndWait();
+				return;
+			}
 
 			if (newName.equals("") || newArtist.equals("")) {
 				Alert alert = new Alert(AlertType.ERROR);
