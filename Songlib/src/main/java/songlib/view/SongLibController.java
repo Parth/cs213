@@ -241,6 +241,7 @@ public class SongLibController {
 
 			if (checkUnique(newSong, index)) {
 				obsList.set(listView.getSelectionModel().getSelectedIndex(), newSong);
+				sortCollection();
 				showSongAtIndex((getIndex(newSong)));
 				return;
 			} else {
