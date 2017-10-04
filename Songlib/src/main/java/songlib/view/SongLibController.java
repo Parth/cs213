@@ -34,20 +34,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class SongLibController {
-	
-	/*TODO
-	 * 1. Sort song list alphabetically every time a new song is added
-	 * 2. Check if unique name and artist for add new song
-	 * 3. After deletion next song in the list should be displayed (or previous if no next, or blank of empty list)
-	 * 4. Add a cancel button, which reverts all fields back to original.
-	 * 5. Make add song a separate Button (maybe, this may or may not be necessary)
+
+	/*
+	 * TODO Sort song list alphabetically every time a new song is added 
 	 * 
 	 */
-	
-	
+
 	@FXML
 	private ListView<Song> listView;
 
+	@FXML
+	private Button addNew;
 	@FXML
 	private Button save;
 	@FXML
@@ -64,11 +61,12 @@ public class SongLibController {
 	private ObservableList<Song> obsList;
 	private Stage mainStage;
 
+	private boolean addingNewSong = false;
+
 	public void start(Stage mainStage) {
 		this.mainStage = mainStage;
-		
+
 		// set the change methods for the text fields
-		// this listener just enables the save button
 		name.textProperty().addListener(editEnableListener);
 		artist.textProperty().addListener(editEnableListener);
 		album.textProperty().addListener(editEnableListener);
@@ -76,17 +74,16 @@ public class SongLibController {
 
 		save.setOnAction(saveSong);
 		delete.setOnAction(deleteSong);
-		
-		// create an ObservableList
-		// from an ArrayList
+		addNew.setOnAction(addNewSong);
 
 		obsList = FXCollections.observableArrayList();
 
 		IOException ioe = null;
 		try {
 			String content = new String(Files.readAllBytes(Paths.get("library.dat")));
-			Gson gson = new Gson(); 
-			Type songList = new TypeToken<ArrayList<Song>>(){}.getType();
+			Gson gson = new Gson();
+			Type songList = new TypeToken<ArrayList<Song>>() {
+			}.getType();
 			ArrayList<Song> tempList = gson.fromJson(content, songList);
 			obsList.addAll(tempList);
 		} catch (IOException e) {
@@ -97,23 +94,24 @@ public class SongLibController {
 		if (ioe != null || obsList == null) {
 			obsList.add(new Song());
 		}
-		obsList.addListener((ListChangeListener) (c -> {saveList();}));
+		obsList.addListener((ListChangeListener) (c -> {
+			saveList();
+		}));
 		listView.setItems(obsList);
 
 		// select the first item
-		listView.getSelectionModel().select(0);
+		listView.getSelectionModel().clearSelection();
+		makeBlank();
 
 		// set listener for the items
 		listView.setOnMouseClicked(showSong);
 
 	}
-
+	// save library to disk for persistence
 	private void saveList() {
-		System.out.println("Saving List");
 		Gson gson = new Gson();
 		String json = gson.toJson(obsList);
-		System.out.println(json);
-		
+
 		try {
 			PrintWriter out = new PrintWriter("library.dat");
 			out.println(json);
@@ -122,105 +120,171 @@ public class SongLibController {
 			System.err.println("Save file not accessible");
 		}
 	}
+
+	// What to do when add new song button is clicked
+	private EventHandler<ActionEvent> addNewSong = new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent e) {
+			listView.getSelectionModel().clearSelection();
+			addingNewSong = true;
+			name.textProperty().set("");
+			name.setPromptText("New Song Name");
+			artist.textProperty().set("");
+			artist.setPromptText("New Song Artist");
+			album.textProperty().set("");
+			album.setPromptText("New Song Album");
+			year.textProperty().set("");
+			year.setPromptText("New Song Year");
+
+			// you cannot delete the add song field
+			delete.setDisable(true);
+
+		}
+	};
+
 	
-	// For Text fields
-	// Tested, and works
+
+	// For Text fields, after any change in made enable saving
 	private ChangeListener<String> editEnableListener = new ChangeListener<String>() {
 		@Override
 		public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-			System.out.println("Inside edit listener");
 			if (!oldValue.equals(newValue)) {
 				save.disableProperty().set(false);
 			}
 		}
 	};
-	
-	// For ListView
+
+	// After a song is clicked on, show its details
 	private EventHandler<MouseEvent> showSong = new EventHandler<MouseEvent>() {
 		public void handle(MouseEvent e) {
-			
 			int index = listView.getSelectionModel().getSelectedIndex();
-			System.out.println("clicked on " +  index);
-			Song newSong = obsList.get(index);
-	
-			name.textProperty().set(newSong.getName());
-			artist.textProperty().set(newSong.getArtist());
-			album.textProperty().set(newSong.getAlbum());
-			year.textProperty().set(Integer.toString(newSong.getYear()));
-			if (index == 0) {
-				// you cannot delete the add song field
-				delete.setDisable(true);
-			}
-			else {
-				delete.setDisable(false);
-			}
+			showSongAtIndex(index);
 		}
+
 	};
-	
-	//For the Save Button
-	// tested and works
+
+	// this method is a general form to show a song at a certain index
+	private void showSongAtIndex(int index) {
+		listView.getSelectionModel().select(index);
+
+		Song newSong = obsList.get(index);
+
+		name.textProperty().set(newSong.getName());
+		name.setPromptText("");
+		artist.textProperty().set(newSong.getArtist());
+		artist.setPromptText("");
+		album.textProperty().set(newSong.getAlbum());
+		album.setPromptText("");
+		year.textProperty().set(newSong.getYear() == -1 ? "" : Integer.toString(newSong.getYear()));
+		year.setPromptText("");
+
+		delete.setDisable(false);
+
+	}
+
+	// Saves songs after save button is clicked
 	private EventHandler<ActionEvent> saveSong = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent e) {
-			int index = listView.getSelectionModel().getSelectedIndex();
-			// If it is the first song, that means a new song is being added
 			String newName = name.getText();
 			String newArtist = artist.getText();
 			String newAlbum = album.getText();
-			String newYear = year.getText();
-			if (newName.equals("") || newArtist.equals("") || newAlbum.equals("") || newYear.equals("")) {
+			// -1 if year is empty to avoid Number parsing errors
+			int newYear = Integer.parseInt(year.getText().equals("") ? "-1" : year.getText());
+
+			if (newName.equals("") || newArtist.equals("")) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.initOwner(mainStage);
 				alert.setTitle("Field Error!");
-				alert.setHeaderText("Please Fill out all fields!");
+				alert.setHeaderText("Please fill out at least name and artist!");
 				alert.showAndWait();
+				return;
 			}
-			
-			
-			
-			if (index != 0) {
-				
-				Song s = new Song(newName, newArtist, newAlbum, Integer.parseInt(newYear));
-				obsList.set(listView.getSelectionModel().getSelectedIndex(), s);
+
+			Song newSong = new Song(newName, newArtist, newAlbum, newYear);
+			// adding a new song
+			if (addingNewSong) {
+				if (checkUnique(newSong, -1)) {
+					obsList.add(newSong);
+					showSongAtIndex((getIndex(newSong)));
+					addingNewSong = false;
+					return;
+				} else
+					showUniquenessError();
+				return;
 			}
-			// Otherwise, an existing song is being edited
-			else {
-				obsList.add(new Song(newName, newArtist, newAlbum, Integer.parseInt(newYear)));
+
+			// editing a song
+			int index = listView.getSelectionModel().getSelectedIndex();
+
+			if (checkUnique(newSong, index)) {
+				obsList.set(listView.getSelectionModel().getSelectedIndex(), newSong);
+				showSongAtIndex((getIndex(newSong)));
+				return;
+			} else {
+				showUniquenessError();
+				return;
 			}
-			resetToZero();
+
 		}
 	};
+	
+	private void showUniquenessError() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.initOwner(mainStage);
+		alert.setTitle("Uniqueness Error!");
+		alert.setHeaderText("The song that you filled out already exists!!");
+		alert.showAndWait();
+		return;
+	}
 
 	// For delete button
 	private EventHandler<ActionEvent> deleteSong = new EventHandler<ActionEvent>() {
-		public void handle (ActionEvent e) {
-			if (obsList.size() == 1) {
-				// Add some error texts
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.initOwner(mainStage);
-				alert.setTitle("Deletion Error!");
-				alert.setHeaderText("Cannot Delete an Empty Song");
-				alert.showAndWait();
+		public void handle(ActionEvent e) {
+			int index = listView.getSelectionModel().getSelectedIndex();
+			obsList.remove(index);
+
+			if (index >= obsList.size()) {
+				if (index - 1 >= 0)
+					showSongAtIndex(index - 1);
+				else
+					makeBlank();
 			} else {
-				int index = listView.getSelectionModel().getSelectedIndex();
-	
-				obsList.remove(index);
+				showSongAtIndex(index);
 			}
-			
-			resetToZero();
-			
 		}
 
 	};
+
+	// getting the index of a song in the library
+	private int getIndex(Song s) {
+		for (int i = 0; i < obsList.size(); i++) {
+			if (obsList.get(i).equals(s))
+				return i;
+		}
+		return -1;
+	}
+
+	// check if a song is already in the list or not, 
+	// index param is the index to ignore, necessary to edit a song 
+	private boolean checkUnique(Song s, int index) {
+		for (int i = 0; i < obsList.size(); i++) {
+			if (i == index)
+				continue;
+			Song song = obsList.get(i);
+			if (song.getName().equals(s.getName()) && song.getArtist().equals(s.getArtist())) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
-	// This function should always be called when returning to the
-	// add song menu
-	private void resetToZero() {
-		listView.getSelectionModel().select(0);
-		Song newSong = obsList.get(0);
-		name.setPromptText(newSong.getName());
-		artist.setPromptText(newSong.getArtist());
-		album.setPromptText(newSong.getAlbum());
-		year.setPromptText(Integer.toString(newSong.getYear()));
-		delete.setDisable(true);
+	// Make all fields blank and reset view
+	private void makeBlank() {
+		listView.getSelectionModel().clearSelection();
+		name.textProperty().set("");
+		artist.textProperty().set("");
+		album.textProperty().set("");
+		year.textProperty().set("");
+		save.disableProperty().set(true);
+		delete.disableProperty().set(true);
 	}
 }

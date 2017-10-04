@@ -17,14 +17,18 @@
         <AnchorPane
                 prefHeight="160.0"
                 prefWidth="100.0">
-            <children>
-                <ListView
-						fx:id="listView"
-                        AnchorPane.topAnchor="0.0"
-                        AnchorPane.bottomAnchor="0.0"
-                        AnchorPane.rightAnchor="0.0"
-                        AnchorPane.leftAnchor="0.0"/>
-            </children>
+           	<children>
+           		<VBox 
+           			AnchorPane.topAnchor="0.0"
+					AnchorPane.bottomAnchor="0.0" 
+					AnchorPane.rightAnchor="0.0"
+					AnchorPane.leftAnchor="0.0">
+           			<children>
+            			<Button fx:id="addNew">Add New Song</Button>
+                		<ListView fx:id="listView"/>
+            		</children>
+           		</VBox>
+           	</children>
         </AnchorPane>
         <AnchorPane
                 minHeight="0.0"
@@ -72,6 +76,11 @@
                                 <Button fx:id="save" disable="true">Save</Button>
                                 <Button fx:id="delete" disable="true">Delete</Button>
                             </children>
+                        </HBox>
+                        <HBox>
+                        	<children>
+                        		<Text>To cancel edits before saving, click on the song again in library.</Text>
+                        	</children>
                         </HBox>
                     </children>
                 </VBox>
