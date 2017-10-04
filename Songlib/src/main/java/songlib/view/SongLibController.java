@@ -32,6 +32,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class SongLibController {
 
@@ -102,6 +104,16 @@ public class SongLibController {
 
 		// set listener for the items
 		listView.setOnMouseClicked(showSong);
+
+	}
+
+	private void sortCollection() {
+		FXCollections.sort(obsList, new Comparator<Song>() {
+			@Override
+			public int compare(Song s1, Song s2) {
+				return s1.getName().compareTo(s2.getName());
+			}
+		});
 
 	}
 
@@ -215,6 +227,7 @@ public class SongLibController {
 			if (addingNewSong) {
 				if (checkUnique(newSong, -1)) {
 					obsList.add(newSong);
+					sortCollection();
 					showSongAtIndex((getIndex(newSong)));
 					addingNewSong = false;
 					return;
