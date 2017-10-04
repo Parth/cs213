@@ -91,9 +91,6 @@ public class SongLibController {
 			ioe = e;
 		}
 
-		if (ioe != null || obsList == null) {
-			obsList.add(new Song());
-		}
 		obsList.addListener((ListChangeListener) (c -> {
 			saveList();
 		}));
