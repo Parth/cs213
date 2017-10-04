@@ -107,6 +107,7 @@ public class SongLibController {
 		listView.setOnMouseClicked(showSong);
 
 	}
+
 	// save library to disk for persistence
 	private void saveList() {
 		Gson gson = new Gson();
@@ -164,20 +165,22 @@ public class SongLibController {
 
 	// this method is a general form to show a song at a certain index
 	private void showSongAtIndex(int index) {
-		listView.getSelectionModel().select(index);
+		if (obsList.size()>1) {
+			listView.getSelectionModel().select(index);
 
-		Song newSong = obsList.get(index);
+			Song newSong = obsList.get(index);
 
-		name.textProperty().set(newSong.getName());
-		name.setPromptText("");
-		artist.textProperty().set(newSong.getArtist());
-		artist.setPromptText("");
-		album.textProperty().set(newSong.getAlbum());
-		album.setPromptText("");
-		year.textProperty().set(newSong.getYear() == -1 ? "" : Integer.toString(newSong.getYear()));
-		year.setPromptText("");
+			name.textProperty().set(newSong.getName());
+			name.setPromptText("");
+			artist.textProperty().set(newSong.getArtist());
+			artist.setPromptText("");
+			album.textProperty().set(newSong.getAlbum());
+			album.setPromptText("");
+			year.textProperty().set(newSong.getYear() == -1 ? "" : Integer.toString(newSong.getYear()));
+			year.setPromptText("");
 
-		delete.setDisable(false);
+			delete.setDisable(false);
+		}
 
 	}
 
