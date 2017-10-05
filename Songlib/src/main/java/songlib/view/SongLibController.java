@@ -46,6 +46,8 @@ public class SongLibController {
 	private ListView<Song> listView;
 
 	@FXML
+	private Button cancel;
+	@FXML
 	private Button addNew;
 	@FXML
 	private Button save;
@@ -77,6 +79,7 @@ public class SongLibController {
 		save.setOnAction(saveSong);
 		delete.setOnAction(deleteSong);
 		addNew.setOnAction(addNewSong);
+		cancel.setOnAction(cancelButton);
 
 		obsList = FXCollections.observableArrayList();
 
@@ -111,7 +114,11 @@ public class SongLibController {
 		FXCollections.sort(obsList, new Comparator<Song>() {
 			@Override
 			public int compare(Song s1, Song s2) {
-				return s1.getName().compareTo(s2.getName());
+				
+				if (s1.getName().toLowerCase().compareTo(s2.getName().toLowerCase()) == 0)
+					return s1.getArtist().toLowerCase().compareTo(s2.getArtist().toLowerCase());
+				else
+					return s1.getName().toLowerCase().compareTo(s2.getName().toLowerCase());
 			}
 		});
 
@@ -136,6 +143,11 @@ public class SongLibController {
 		public void handle(ActionEvent e) {
 			listView.getSelectionModel().clearSelection();
 			addingNewSong = true;
+			name.disableProperty().set(false);
+			artist.disableProperty().set(false);
+			album.disableProperty().set(false);
+			year.disableProperty().set(false);
+			
 			name.textProperty().set("");
 			name.setPromptText("New Song Name");
 			artist.textProperty().set("");
@@ -147,6 +159,7 @@ public class SongLibController {
 
 			// you cannot delete the add song field
 			delete.setDisable(true);
+			cancel.disableProperty().set(false);
 
 		}
 	};
@@ -175,6 +188,11 @@ public class SongLibController {
 	// this method is a general form to show a song at a certain index
 	private void showSongAtIndex(int index) {
 		if (obsList.size() > 0 && index >= 0 && index < obsList.size()) {
+			name.disableProperty().set(false);
+			artist.disableProperty().set(false);
+			album.disableProperty().set(false);
+			year.disableProperty().set(false);
+			
 			listView.getSelectionModel().select(index);
 
 			Song newSong = obsList.get(index);
@@ -189,6 +207,7 @@ public class SongLibController {
 			year.setPromptText("");
 
 			delete.setDisable(false);
+			cancel.disableProperty().set(false);
 		}
 
 	}
@@ -278,6 +297,16 @@ public class SongLibController {
 		}
 
 	};
+	
+	private EventHandler<ActionEvent> cancelButton = new EventHandler<ActionEvent>() {
+
+		@Override
+		public void handle(ActionEvent event) {
+			// TODO Auto-generated method stub
+			makeBlank();
+		}
+		
+	};
 
 	// getting the index of a song in the library
 	private int getIndex(Song s) {
@@ -295,7 +324,8 @@ public class SongLibController {
 			if (i == index)
 				continue;
 			Song song = obsList.get(i);
-			if (song.getName().equals(s.getName()) && song.getArtist().equals(s.getArtist())) {
+			if (song.getName().toLowerCase().equals(s.getName().toLowerCase()) 
+					&& song.getArtist().toLowerCase().equals(s.getArtist().toLowerCase())) {
 				return false;
 			}
 		}
@@ -306,10 +336,17 @@ public class SongLibController {
 	private void makeBlank() {
 		listView.getSelectionModel().clearSelection();
 		name.textProperty().set("");
+		name.disableProperty().set(true);
 		artist.textProperty().set("");
+		artist.disableProperty().set(true);
 		album.textProperty().set("");
+		album.disableProperty().set(true);
 		year.textProperty().set("");
+		year.disableProperty().set(true);
+		
 		save.disableProperty().set(true);
 		delete.disableProperty().set(true);
+		cancel.disableProperty().set(true);
+		
 	}
 }

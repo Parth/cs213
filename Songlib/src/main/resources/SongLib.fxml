@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 
+	Shantanu Laghate, Parth Mehrotra -->
+
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
@@ -79,7 +82,7 @@
                         </HBox>
                         <HBox>
                         	<children>
-                        		<Text>To cancel edits before saving, click on the song again in library.</Text>
+                        		<Button fx:id="cancel">Cancel</Button>
                         	</children>
                         </HBox>
                     </children>
